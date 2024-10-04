@@ -1,0 +1,21 @@
+{
+    "recommendations": [
+        "cschlosser.doxdocgen",
+        "eamodio.gitlens",
+        "evgeniypeshkov.syntax-highlighter",
+        "github.copilot",
+        "github.copilot-chat",
+        "gruntfuggly.todo-tree",
+        "harikrishnan94.cxx-compiler-explorer",
+        "leetcode.vscode-leetcode",
+        "matepek.vscode-catch2-test-adapter",
+        "ms-vscode.cmake-tools",
+        "ms-vscode.cpptools",
+        "ms-vscode.cpptools-extension-pack",
+        "ms-vscode.cpptools-themes",
+        "ms-vscode.hexeditor",
+        "twxs.cmake",
+        "visualstudioexptteam.intellicode-api-usage-examples",
+        "visualstudioexptteam.vscodeintellicode"
+    ]
+}

@@ -1,0 +1,12 @@
+services:
+
+  devcontainer:
+    build:
+      dockerfile: ./kamacoder-solutions.Dockerfile
+    image: kamacoder-solutions-devcontainer
+    container_name: kamacoder-solutions-devcontainer
+    restart: unless-stopped
+    volumes:
+      - .:/app
+    environment:
+      - TZ=Asia/Taipei
