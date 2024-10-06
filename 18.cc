@@ -6,28 +6,38 @@ using namespace std;
 class linked_list {
 public:
     linked_list() {}
-    ~linked_list() { delete sentinal; }
+    ~linked_list() {
+        auto iter = sentinal->next;
+        while (iter != nullptr) {
+            auto t = iter->next;
+            delete iter;
+            iter = t;
+        }
+        delete sentinal;
+    }
 
     void insert_at_head(int val) {
-        node *n = new node {val, sentinal->next};
+        node *n = new node{val, sentinal->next};
         sentinal->next = n;
         size += 1;
     }
 
     void insert_at_n(int val, unsigned ix) {
         if (ix > size) {
-            cout << "insert fail" << endl; return;
+            cout << "insert fail" << endl;
+            return;
         }
         auto iter = sentinal;
         while (ix != 0) {
-            iter = iter->next; ix -= 1;
+            iter = iter->next;
+            ix -= 1;
         }
         auto tmp = iter->next;
-        iter->next = new node {val, tmp};
+        iter->next = new node{val, tmp};
         size += 1;
         cout << "insert OK" << endl;
     }
-    
+
     int get(unsigned ix) const {
         if (ix >= size) {
             cout << "get fail" << endl;
@@ -35,7 +45,8 @@ public:
         }
         auto iter = sentinal->next;
         while (ix != 0) {
-            iter = iter->next; ix -= 1;
+            iter = iter->next;
+            ix -= 1;
         }
         return iter->val;
     }
@@ -47,7 +58,8 @@ public:
         }
         auto iter = sentinal;
         while (ix != 0) {
-            iter = iter->next; ix -= 1;
+            iter = iter->next;
+            ix -= 1;
         }
         auto tmp = iter->next;
         iter->next = iter->next->next;
@@ -73,20 +85,26 @@ private:
         int val;
         node *next;
     };
+
 private:
-    node *sentinal {new node {-1, nullptr}};
-    unsigned size {0};
+    node *sentinal{new node{-1, nullptr}};
+    unsigned size{0};
 };
 
 int main(int, char const *[]) {
     linked_list lst;
-    int n; cin >> n;
+    int n;
+    cin >> n;
     while (n--) {
-        int val; cin >> val; lst.insert_at_head(val);
+        int val;
+        cin >> val;
+        lst.insert_at_head(val);
     }
-    cin >> n; getchar();
+    cin >> n;
+    getchar();
     while (n--) {
-        string oper; getline(cin, oper);
+        string oper;
+        getline(cin, oper);
         if (oper == "show") {
             lst.show();
         } else if (oper.rfind("get", 0) == 0) {
