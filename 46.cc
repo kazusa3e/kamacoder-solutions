@@ -17,20 +17,15 @@ void handle_input() {
 }
 
 void solve() {
-    vector<vector<unsigned>> dp(num_items, vector<unsigned>(caps + 1, 0));
-    for (unsigned i = 0; i != num_items; ++i) dp[i][0] = 0;
-    for (unsigned j = 0; j <= caps; ++j) dp[0][j] = (j >= weights[0]) ? values[0] : 0;
-
+    vector<unsigned> dp(caps + 1, 0);
+    for (unsigned j = 0; j <= caps; ++j) dp[j] = (j >= weights[0]) ? values[0] : 0;
     for (unsigned i = 1; i != num_items; ++i) {
-        for (unsigned j = 1; j <= caps; ++j) {
-            if (j < weights[i]) dp[i][j] = dp[i - 1][j];
-            else dp[i][j] = max(
-                dp[i - 1][j],
-                dp[i - 1][j - weights[i]] + values[i]
-            );
+        for (unsigned j = caps; j >= 1; --j) {
+            if (j < weights[i]) continue;
+            dp[j] = max(dp[j], dp[j - weights[i]] + values[i]);
         }
     }
-    cout << dp.back().back() << endl;
+    cout << dp.back() << endl;
 }
 
 
