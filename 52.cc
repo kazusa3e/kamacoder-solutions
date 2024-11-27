@@ -20,9 +20,11 @@ void solve() {
     // [caps] => ans
     vector<unsigned> dp(caps + 1, 0);
     
-    for (unsigned i = 0; i != weights.size(); ++i) {
-        for (int j = weights[i]; j < caps + 1; ++j) {
-            dp[j] = max(dp[j], dp[j - weights[i]] + values[i]);
+    for (int j = 0; j < caps + 1; ++j) {
+        for (int i = 0; i != weights.size(); ++i) {
+            if (j >= weights[i]) {
+                dp[j] = max(dp[j], dp[j - weights[i]] + values[i]);
+            }
         }
     }
 
