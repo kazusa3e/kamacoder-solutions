@@ -2,59 +2,43 @@
 #include <string>
 #include <memory>
 
-class Shape {
+class shape {
 public:
-    virtual void build() = 0;
+    virtual void show() = 0;
 };
 
-class Circle : public Shape {
+class circle : public shape {
 public:
-    void build() override {
+    void show() override {
         std::cout << "Circle Block" << std::endl;
     }
 };
 
-class Square : public Shape {
+class square : public shape {
 public:
-    void build() override {
+    void show() override {
         std::cout << "Square Block" << std::endl;
     }
 };
 
-class ShapeFactory {
+class shape_factory {
 public:
-    virtual std::unique_ptr<Shape> createShape() = 0;
-};
-
-class CircleFactory : public ShapeFactory {
-public:
-    std::unique_ptr<Shape> createShape() override {
-        return std::make_unique<Circle>();
-    }
-};
-
-class SquareFactory : public ShapeFactory {
-public:
-    std::unique_ptr<Shape> createShape() override {
-        return std::make_unique<Square>();
+    std::unique_ptr<shape> create_shape(const std::string &type) {
+        if (type == "Circle") return std::make_unique<circle>();
+        if (type == "Square") return std::make_unique<square>();
+        return {};
     }
 };
 
 int main(int, char const *[]) {
-    int n; std::cin >> n;
-    std::string name; unsigned quantity;
-    CircleFactory cf;
-    SquareFactory sf;
-    while (n--) {
-        std::cin >> name >> quantity;
+    unsigned cnt; std::cin >> cnt;
+    shape_factory sf;
+    while (cnt--) {
+        std::string type; unsigned quantity;
+        std::cin >> type >> quantity;
         for (unsigned ix = 0; ix != quantity; ++ix) {
-            std::unique_ptr<Shape> val;
-            if (name == "Circle") {
-                val = cf.createShape();
-            } else if (name == "Square") {
-                val = sf.createShape();
-            }
-            val->build();
+            auto res = sf.create_shape(type);
+            if (res) res->show();
         }
     }
     return 0;
