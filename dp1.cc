@@ -51,8 +51,11 @@ private:
     std::vector<item_type> items;
 };
 
+template class singleton<cart>;
+using singleton_cart = singleton<cart>;
+
 int main(int, char const *[]) {
-    auto &g_cart = singleton<cart>::get_instance();
+    auto &g_cart = singleton_cart::get_instance();
     std::string line, name; unsigned quantity;
     while (getline(std::cin, line)) {
         std::stringstream converter { line };
