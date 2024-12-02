@@ -1,83 +1,82 @@
 #include <iostream>
 #include <memory>
+#include <string>
 
-class Chair {
+class chair {
 public:
-    virtual void build() = 0;
+    virtual void show() = 0;
 };
 
-class ModernChair : public Chair {
+class modern_chair : public chair {
 public:
-    void build() override {
+    void show() override {
         std::cout << "modern chair" << std::endl;
     }
 };
 
-class ClassicalChair : public Chair {
+class classical_chair : public chair {
 public:
-    void build() override {
+    void show() override {
         std::cout << "classical chair" << std::endl;
     }
 };
 
-class Sofa {
+class sofa {
 public:
-    virtual void build() = 0;
+    virtual void show() = 0;
 };
 
-class ModernSofa : public Sofa {
+class modern_sofa : public sofa {
 public:
-    void build() override {
+    void show() override {
         std::cout << "modern sofa" << std::endl;
     }
 };
 
-class ClassicalSofa : public Sofa {
+class classical_sofa : public sofa {
 public:
-    void build() override {
+    void show() override {
         std::cout << "classical sofa" << std::endl;
     }
 };
 
-class Factory {
+class factory {
 public:
-    virtual std::unique_ptr<Chair> createChair() = 0;
-    virtual std::unique_ptr<Sofa> createSofa() = 0;
+    virtual std::unique_ptr<chair> build_chair() = 0;
+    virtual std::unique_ptr<sofa> build_sofa() = 0;
 };
 
-class ModernFactory : public Factory {
+class modern_factory : public factory {
 public:
-    std::unique_ptr<Chair> createChair() override {
-        return std::make_unique<ModernChair>();
+    std::unique_ptr<chair> build_chair() override {
+        return std::make_unique<modern_chair>();
     }
-    std::unique_ptr<Sofa> createSofa() override {
-        return std::make_unique<ModernSofa>();
+    std::unique_ptr<sofa> build_sofa() override {
+        return std::make_unique<modern_sofa>();
     }
 };
 
-class ClassicalFactory : public Factory {
+class classical_factory : public factory {
 public:
-    std::unique_ptr<Chair> createChair() override {
-        return std::make_unique<ClassicalChair>();
+    std::unique_ptr<chair> build_chair() override {
+        return std::make_unique<classical_chair>();
     }
-    std::unique_ptr<Sofa> createSofa() override {
-        return std::make_unique<ClassicalSofa>();
+    std::unique_ptr<sofa> build_sofa() override {
+        return std::make_unique<classical_sofa>();
     }
 };
 
 int main(int, char const *[]) {
-    int n; std::cin >> n;
-    std::string type;
-    ModernFactory mf;
-    ClassicalFactory cf;
-    while (n--) {
-        std::cin >> type;
+    unsigned cnt; std::cin >> cnt;
+    modern_factory mf; classical_factory cf;
+    while (cnt--) {
+        std::string type; std::cin >> type;
         if (type == "modern") {
-            (mf.createChair())->build();
-            (mf.createSofa())->build();
+            mf.build_chair()->show();
+            mf.build_sofa()->show();
         } else if (type == "classical") {
-            (cf.createChair())->build();
-            (cf.createSofa())->build();
+            cf.build_chair()->show();
+            cf.build_sofa()->show();
         }
     }
     return 0;
