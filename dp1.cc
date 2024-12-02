@@ -1,60 +1,64 @@
 // link: https://kamacoder.com/problempage.php?pid=1074
 
-#include <memory>
 #include <string>
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <sstream>
+#include <iterator>
+
+template <typename T>
+class singleton {
+public:
+    singleton(const singleton &) = delete;
+    singleton &operator=(const singleton &) = delete;
+
+    static T &get_instance() {
+        static T instance;
+        return instance;
+    }
+private:
+    singleton() = default;
+};
 
 class cart {
 public:
-    static cart &get_instance();
+    using item_type = std::pair<std::string, unsigned>;
 
 public:
-    cart(const cart &) = delete;
-    cart &operator=(const cart &) = delete;
-    cart &operator<<(cart &&) = delete;
-
-public:
-    void add(const std::string &item, unsigned quantity) {
-        auto pos = std::find_if(items.begin(), items.end(), [&item](const std::pair<std::string, unsigned> &v) -> bool {
-            return v.first == item;
-        });
-        if (pos == items.end()) {
-            items.push_back(std::make_pair(item, quantity));
+    void add(const std::string &name, unsigned count) {
+        if (const auto pos = std::find_if(items.begin(), items.end(),
+            [&](const item_type &el) { return el.first == name; });
+            pos != items.end()) {
+                pos->second += count;
         } else {
-            pos->second += quantity;
+            items.push_back({ name, count });
         }
     }
 
-    friend std::ostream &operator<<(std::ostream &os, const cart &c);
+public:
+    friend std::ostream &operator<<(std::ostream &os, const cart &c) {
+        std::ostringstream oss;
+        for (auto iter = c.items.begin(); iter != c.items.end(); ++iter) {
+            oss << iter->first << " " << iter->second;
+            if (next(iter) != c.items.end()) oss << std::endl;
+        }
+        os << oss.str();
+        return os;
+    }
 
 private:
-    cart() = default;
-
-private:
-    std::vector<std::pair<std::string, unsigned>> items;
+    std::vector<item_type> items;
 };
 
-cart &cart::get_instance() {
-    static cart instance;
-    return instance;
-}
-
-std::ostream &operator<<(std::ostream &os, const cart &c) {
-    for (auto iter = c.items.begin(); iter != c.items.end(); ++iter) {
-        os << iter->first << " " << iter->second;
-        if (next(iter) != c.items.end()) os << std::endl;
-    }
-    return os;
-}
-
 int main(int, char const *[]) {
-    std::string item; unsigned quantity;
-    auto &c = cart::get_instance();
-    while (std::cin >> item >> quantity) {
-        c.add(item, quantity);
+    auto &g_cart = singleton<cart>::get_instance();
+    std::string line, name; unsigned quantity;
+    while (getline(std::cin, line)) {
+        std::stringstream converter { line };
+        converter >> name >> quantity;
+        g_cart.add(name, quantity);
     }
-    std::cout << c << std::endl;
+    std::cout << g_cart << std::endl;
     return 0;
 }
