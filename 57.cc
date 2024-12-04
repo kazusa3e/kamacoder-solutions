@@ -13,7 +13,6 @@ int main(int, char const *[]) {
     for (int i = 1; i <= n; ++i) {
         dp[i] = accumulate(dp.begin() + max(0, i - m), dp.begin() + i, 0);
     }
-    for (const auto &el : dp) cout << el << " "; cout << endl;
     cout << dp[n] << endl;
     return 0;
 }
